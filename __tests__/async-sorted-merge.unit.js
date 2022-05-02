@@ -1,5 +1,5 @@
 const LogSource = require("../lib/log-source");
-const SyncSortedMerge = require("../solution/sync-sorted-merge");
+const AsyncSortedMerge = require("../solution/async-sorted-merge");
 
 function Printer() {
     this.lastDate = -1;
@@ -16,25 +16,25 @@ function Printer() {
 }
 const NUM_OF_LOG_SOURCES = 7;
 
-describe("Sync Sorted Merge Behaviors", () => {
-    let syncLogSources;
+describe("Async Sorted Merge Behaviors", () => {
+    let asyncLogSources;
 
     beforeEach(() => {
-        syncLogSources = [];
+        asyncLogSources = [];
         for (let i = 0; i < NUM_OF_LOG_SOURCES; i++) {
             const logSource = new LogSource();
-            jest.spyOn(logSource, 'pop');
-            syncLogSources.push(logSource);
+            jest.spyOn(logSource, 'popAsync');
+            asyncLogSources.push(logSource);
         }
     });
 
-    test("It should synchronously drain multiple log sources", () => {
+    test("It should asynchronously drain multiple log sources", async () => {
         const printerObj = new Printer();
-        SyncSortedMerge(syncLogSources, printerObj);
+        await AsyncSortedMerge(asyncLogSources, printerObj);
 
-        // Count how many calls to the 'pop' have been done in total
-        const numberOfLogsPopped = syncLogSources.reduce((result, logSource) => {
-            result += logSource.pop.mock.calls.length;
+        // Count how many calls to the 'popAsync' have been done in total
+        const numberOfLogsPopped = asyncLogSources.reduce((result, logSource) => {
+            result += logSource.popAsync.mock.calls.length;
             return result;
         }, 0);
         

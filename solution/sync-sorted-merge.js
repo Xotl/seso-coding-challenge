@@ -1,26 +1,7 @@
 "use strict";
+const { getIndexOfOldestDate } = require('./utils');
 
 // Print all entries, across all of the sources, in chronological order.
-
-function getIndexOfOldestDate(incomingDateFromLogSourceArr) {
-    let resultingIdx = null;
-    for (let idx = 0; idx < incomingDateFromLogSourceArr.length; idx++) {
-        if (incomingDateFromLogSourceArr[idx] === false) {
-            return idx;
-        }
-
-        if (resultingIdx === null) {
-            resultingIdx = 0;
-            continue;
-        }
-
-        if (incomingDateFromLogSourceArr[resultingIdx] > incomingDateFromLogSourceArr[idx]) {
-            resultingIdx = idx;
-        }
-    }
-
-    return resultingIdx;
-}
 
 module.exports = (logSources, printer) => {
     const incomingDateFromLogSourceArr = new Array(logSources.length);
@@ -30,7 +11,7 @@ module.exports = (logSources, printer) => {
     }
 
     let drainedLogSourcesCount = 0;
-    while (drainedLogSourcesCount !== logSources.length) {
+    while (drainedLogSourcesCount < logSources.length) {
         const oldestDateIdx = getIndexOfOldestDate(incomingDateFromLogSourceArr);
         const oldestLogObj = incomingDateFromLogSourceArr[oldestDateIdx];
         if (oldestLogObj) {
