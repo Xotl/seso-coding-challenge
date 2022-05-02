@@ -1,5 +1,4 @@
 "use strict";
-const promise = require('bluebird/js/release/promise');
 const { getIndexOfOldestDate } = require('./utils');
 
 // Print all entries, across all of the *async* sources, in chronological order.
